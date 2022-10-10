@@ -25,12 +25,12 @@ public class MountainEntity {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @Column(name = "region", length = 100)
+    @Column(name = "region", nullable = false, length = 100)
     private String region;
 
-    @Column(name = "coords", length = 100)
+    @Column(name = "coords", nullable = false, length = 100)
     private String coords;
 
-    @Column(name = "route_image", length = 250)
+    @Column(name = "route_image", nullable = false, length = 250)
     private String routeImage;
 }

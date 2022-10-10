@@ -1,8 +1,11 @@
 package org.aaron.savage.hiking.service;
 
 import org.aaron.savage.hiking.dto.MountainDto;
+import org.aaron.savage.hiking.dto.UserDto;
 import org.aaron.savage.hiking.entity.MountainEntity;
+import org.aaron.savage.hiking.entity.UserEntity;
 import org.aaron.savage.hiking.repository.MountainRepository;
+import org.aaron.savage.hiking.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,11 +19,13 @@ class HikingServiceTest {
 
     private MountainRepository mountainRepository = mock(MountainRepository.class);
 
+    private UserRepository userRepository = mock(UserRepository.class);
+
     private HikingService hikingService;
 
     @BeforeEach
     public void setUp() {
-        hikingService = new HikingService(mountainRepository);
+        hikingService = new HikingService(mountainRepository, userRepository);
     }
 
     private MountainEntity createMountainEntity() {
@@ -34,6 +39,14 @@ class HikingServiceTest {
                 .setRouteImage("image");
     }
 
+    private UserEntity createUserEntity() {
+
+        return new UserEntity()
+                .setName("Aaron Savage")
+                .setUsername("user67")
+                .setPassword("securePassword");
+    }
+
     private MountainDto createMatchingMountainDto(MountainEntity mountainEntity) {
 
         return MountainDto.builder()
@@ -43,6 +56,15 @@ class HikingServiceTest {
                 .region(mountainEntity.getRegion())
                 .coords(mountainEntity.getCoords())
                 .routeImage(mountainEntity.getRouteImage())
+                .build();
+    }
+
+    private UserDto createMatchingUserDto(UserEntity userEntity) {
+
+        return UserDto.builder()
+                .name(userEntity.getName())
+                .username(userEntity.getUsername())
+                .password(userEntity.getPassword())
                 .build();
     }
 
@@ -59,5 +81,20 @@ class HikingServiceTest {
 
         // assert
         assertThat(mountainDtos).containsOnly(expectedMountainDto);
+    }
+
+    @Test
+    public void testGetUsername() {
+
+        // arrange
+        UserEntity userEntity = createUserEntity();
+        UserDto expectedUserDto = createMatchingUserDto(userEntity);
+        when(userRepository.findByUsername("KieranTierney")).thenReturn(userEntity);
+
+        // act
+        UserDto userDto = hikingService.getUsername("KieranTierney");
+
+        // assert
+        assertThat(userDto).isEqualTo(expectedUserDto);
     }
 }
