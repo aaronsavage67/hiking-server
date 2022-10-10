@@ -1,15 +1,9 @@
 spring:
   application.name: hiking
   datasource:
-    url: jdbc:mysql://localhost:3306/hiking?autoReconnect=true&verifyServerCertificate=false
+    url: jdbc:mysql://localhost:3306/test_hiking?autoReconnect=true&verifyServerCertificate=false
     username: hiking_app
     password: StAls2018
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"

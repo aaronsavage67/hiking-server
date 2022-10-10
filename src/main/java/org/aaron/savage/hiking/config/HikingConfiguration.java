@@ -1,5 +1,6 @@
 package org.aaron.savage.hiking.config;
 
+import org.aaron.savage.hiking.repository.MountainRepository;
 import org.aaron.savage.hiking.service.HikingService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class HikingConfiguration {
 
     @Bean
-    HikingService hikingService() {
-        return new HikingService();
+    HikingService hikingService(MountainRepository mountainRepository) {
+        return new HikingService(mountainRepository);
     }
 
 }
