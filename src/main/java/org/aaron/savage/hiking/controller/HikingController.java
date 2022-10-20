@@ -2,6 +2,7 @@ package org.aaron.savage.hiking.controller;
 
 import lombok.AllArgsConstructor;
 import org.aaron.savage.hiking.dto.MountainDto;
+import org.aaron.savage.hiking.dto.MunroBagDto;
 import org.aaron.savage.hiking.dto.UserDto;
 import org.aaron.savage.hiking.service.HikingService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,5 +28,11 @@ public class HikingController {
     public UserDto getUsername() {
 
         return hikingService.getUsername("username");
+    }
+
+    @GetMapping("getMunrosBaggedByUsername")
+    public List<MunroBagDto> getMunrosBaggedByUsername() {
+
+        return hikingService.getMunrosBaggedByUsername("username");
     }
 }

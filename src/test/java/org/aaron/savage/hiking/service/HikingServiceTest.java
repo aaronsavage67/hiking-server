@@ -1,10 +1,13 @@
 package org.aaron.savage.hiking.service;
 
 import org.aaron.savage.hiking.dto.MountainDto;
+import org.aaron.savage.hiking.dto.MunroBagDto;
 import org.aaron.savage.hiking.dto.UserDto;
 import org.aaron.savage.hiking.entity.MountainEntity;
+import org.aaron.savage.hiking.entity.MunroBagEntity;
 import org.aaron.savage.hiking.entity.UserEntity;
 import org.aaron.savage.hiking.repository.MountainRepository;
+import org.aaron.savage.hiking.repository.MunroBagRepository;
 import org.aaron.savage.hiking.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,11 +24,13 @@ class HikingServiceTest {
 
     private UserRepository userRepository = mock(UserRepository.class);
 
+    private MunroBagRepository munroBagRepository = mock(MunroBagRepository.class);
+
     private HikingService hikingService;
 
     @BeforeEach
     public void setUp() {
-        hikingService = new HikingService(mountainRepository, userRepository);
+        hikingService = new HikingService(mountainRepository, userRepository, munroBagRepository);
     }
 
     private MountainEntity createMountainEntity() {
@@ -47,6 +52,15 @@ class HikingServiceTest {
                 .setPassword("securePassword");
     }
 
+    private MunroBagEntity createMunroBagEntity() {
+
+        return new MunroBagEntity()
+                .setUsername("user67")
+                .setDate("27/05/2000")
+                .setRating("10/10")
+                .setComments("what a great time I had climbing this hill");
+    }
+
     private MountainDto createMatchingMountainDto(MountainEntity mountainEntity) {
 
         return MountainDto.builder()
@@ -65,6 +79,16 @@ class HikingServiceTest {
                 .name(userEntity.getName())
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
+                .build();
+    }
+
+    private MunroBagDto createMatchingMunroBagDto(MunroBagEntity munroBagEntity) {
+
+        return MunroBagDto.builder()
+                .username(munroBagEntity.getUsername())
+                .date(munroBagEntity.getDate())
+                .rating(munroBagEntity.getRating())
+                .comments(munroBagEntity.getComments())
                 .build();
     }
 
@@ -96,5 +120,20 @@ class HikingServiceTest {
 
         // assert
         assertThat(userDto).isEqualTo(expectedUserDto);
+    }
+
+    @Test
+    public void testGetMunrosBaggedByUsername() {
+
+        //arrange
+        MunroBagEntity munroBagEntity = createMunroBagEntity();
+        MunroBagDto expectedMunroBagDto = createMatchingMunroBagDto(munroBagEntity);
+        when(munroBagRepository.findByUsername("user67")).thenReturn(List.of(munroBagEntity));
+
+        //act
+        List<MunroBagDto> munroBagDto = hikingService.getMunrosBaggedByUsername("user67");
+
+        //assert
+        assertThat(munroBagDto).containsOnly(expectedMunroBagDto);
     }
 }
