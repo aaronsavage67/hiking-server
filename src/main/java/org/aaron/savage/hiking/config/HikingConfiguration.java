@@ -1,8 +1,6 @@
 package org.aaron.savage.hiking.config;
 
-import org.aaron.savage.hiking.repository.MountainRepository;
-import org.aaron.savage.hiking.repository.MunroBagRepository;
-import org.aaron.savage.hiking.repository.UserRepository;
+import org.aaron.savage.hiking.repository.*;
 import org.aaron.savage.hiking.service.HikingService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 public class HikingConfiguration {
 
     @Bean
-    HikingService hikingService(MountainRepository mountainRepository, UserRepository userRepository, MunroBagRepository munroBagRepository) {
+    HikingService hikingService(MountainRepository mountainRepository, UserRepository userRepository, MunroBagRepository
+            munroBagRepository, TripRepository tripRepository, TripGroupRepository tripGroupRepository) {
 
-        return new HikingService(mountainRepository, userRepository, munroBagRepository);
+        return new HikingService(mountainRepository, userRepository, munroBagRepository, tripRepository,
+                tripGroupRepository);
     }
 }

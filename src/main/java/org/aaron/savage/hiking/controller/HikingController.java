@@ -1,9 +1,7 @@
 package org.aaron.savage.hiking.controller;
 
 import lombok.AllArgsConstructor;
-import org.aaron.savage.hiking.dto.MountainDto;
-import org.aaron.savage.hiking.dto.MunroBagDto;
-import org.aaron.savage.hiking.dto.UserDto;
+import org.aaron.savage.hiking.dto.*;
 import org.aaron.savage.hiking.service.HikingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +32,17 @@ public class HikingController {
     public List<MunroBagDto> getMunrosBaggedByUsername() {
 
         return hikingService.getMunrosBaggedByUsername("username");
+    }
+
+    @GetMapping("getTripByOrganiserId")
+    public TripDto getTripByOrganiserId() {
+
+        return hikingService.getTripByOrganiserId(12345678910L);
+    }
+
+    @GetMapping("getTripGroupByTripId")
+    public TripGroupDto getTripGroupByTripId() {
+
+        return hikingService.getTripGroupByTripId(12345678910L);
     }
 }

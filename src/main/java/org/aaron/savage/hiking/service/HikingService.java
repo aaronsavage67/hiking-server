@@ -1,15 +1,9 @@
 package org.aaron.savage.hiking.service;
 
 import lombok.AllArgsConstructor;
-import org.aaron.savage.hiking.dto.MountainDto;
-import org.aaron.savage.hiking.dto.MunroBagDto;
-import org.aaron.savage.hiking.dto.UserDto;
-import org.aaron.savage.hiking.entity.MountainEntity;
-import org.aaron.savage.hiking.entity.MunroBagEntity;
-import org.aaron.savage.hiking.entity.UserEntity;
-import org.aaron.savage.hiking.repository.MountainRepository;
-import org.aaron.savage.hiking.repository.MunroBagRepository;
-import org.aaron.savage.hiking.repository.UserRepository;
+import org.aaron.savage.hiking.dto.*;
+import org.aaron.savage.hiking.entity.*;
+import org.aaron.savage.hiking.repository.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +17,10 @@ public class HikingService {
     UserRepository userRepository;
 
     MunroBagRepository munroBagRepository;
+
+    TripRepository tripRepository;
+
+    TripGroupRepository tripGroupRepository;
 
     public List<MountainDto> getMountains(String name) {
 
@@ -68,5 +66,28 @@ public class HikingService {
                         .build()
                 )
                 .collect(Collectors.toList());
+    }
+
+    public TripDto getTripByOrganiserId(long organiserId) {
+
+        TripEntity tripEntity = tripRepository.findByOrganiserId(organiserId);
+
+        return TripDto.builder()
+                .organiserId(tripEntity.getOrganiserId())
+                .mountainId(tripEntity.getMountainId())
+                .date(tripEntity.getDate())
+                .description(tripEntity.getDescription())
+                .build();
+    }
+
+    public TripGroupDto getTripGroupByTripId(long tripId) {
+
+        TripGroupEntity tripGroupEntity = tripGroupRepository.findByTripId(tripId);
+
+        return TripGroupDto.builder()
+                .tripId(tripGroupEntity.getTripId())
+                .username(tripGroupEntity.getUsername())
+                .status(tripGroupEntity.getStatus())
+                .build();
     }
 }

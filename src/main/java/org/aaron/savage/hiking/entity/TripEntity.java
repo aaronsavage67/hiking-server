@@ -6,28 +6,25 @@ import lombok.experimental.Accessors;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "munro_bag", uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+@Table(name = "trip", uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
 @Data
 @Accessors(chain = true)
-public class MunroBagEntity {
+public class TripEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @Column(name = "username", nullable = false, length = 25)
-    private String username;
+    @Column(name = "organiser_id", unique = true, nullable = false)
+    private long organiserId;
 
-    @Column(name = "mountain_id", nullable = false)
+    @Column(name = "mountain_id", unique = true, nullable = false)
     private long mountainId;
 
     @Column(name = "date", length = 10)
     private String date;
 
-    @Column(name = "rating", length = 10)
-    private String rating;
-
-    @Column(name = "comments", length = 100)
-    private String comments;
+    @Column(name = "description", length = 1000)
+    private String description;
 }

@@ -1,14 +1,8 @@
 package org.aaron.savage.hiking.service;
 
-import org.aaron.savage.hiking.dto.MountainDto;
-import org.aaron.savage.hiking.dto.MunroBagDto;
-import org.aaron.savage.hiking.dto.UserDto;
-import org.aaron.savage.hiking.entity.MountainEntity;
-import org.aaron.savage.hiking.entity.MunroBagEntity;
-import org.aaron.savage.hiking.entity.UserEntity;
-import org.aaron.savage.hiking.repository.MountainRepository;
-import org.aaron.savage.hiking.repository.MunroBagRepository;
-import org.aaron.savage.hiking.repository.UserRepository;
+import org.aaron.savage.hiking.dto.*;
+import org.aaron.savage.hiking.entity.*;
+import org.aaron.savage.hiking.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,11 +20,16 @@ class HikingServiceTest {
 
     private MunroBagRepository munroBagRepository = mock(MunroBagRepository.class);
 
+    private TripRepository tripRepository = mock(TripRepository.class);
+
+    private TripGroupRepository tripGroupRepository = mock(TripGroupRepository.class);
+
     private HikingService hikingService;
 
     @BeforeEach
     public void setUp() {
-        hikingService = new HikingService(mountainRepository, userRepository, munroBagRepository);
+        hikingService = new HikingService(mountainRepository, userRepository, munroBagRepository, tripRepository,
+                tripGroupRepository);
     }
 
     private MountainEntity createMountainEntity() {
@@ -61,6 +60,23 @@ class HikingServiceTest {
                 .setComments("what a great time I had climbing this hill");
     }
 
+    private TripEntity createTripEntity() {
+
+        return new TripEntity()
+                .setOrganiserId(12345678910L)
+                .setMountainId(12345678910L)
+                .setDate("27/05/2000")
+                .setDescription("Walk is taking place now");
+    }
+
+    private TripGroupEntity createTripGroupEntity() {
+
+        return new TripGroupEntity()
+                .setUsername("user67")
+                .setTripId(12345678910L)
+                .setStatus("Yes");
+    }
+
     private MountainDto createMatchingMountainDto(MountainEntity mountainEntity) {
 
         return MountainDto.builder()
@@ -89,6 +105,25 @@ class HikingServiceTest {
                 .date(munroBagEntity.getDate())
                 .rating(munroBagEntity.getRating())
                 .comments(munroBagEntity.getComments())
+                .build();
+    }
+
+    private TripDto createMatchingTripDto(TripEntity tripEntity) {
+
+        return TripDto.builder()
+                .organiserId(tripEntity.getOrganiserId())
+                .mountainId(tripEntity.getMountainId())
+                .date(tripEntity.getDate())
+                .description(tripEntity.getDescription())
+                .build();
+    }
+
+    private TripGroupDto createMatchingTripGroupDto(TripGroupEntity tripGroupEntity) {
+
+        return TripGroupDto.builder()
+                .tripId(tripGroupEntity.getTripId())
+                .username(tripGroupEntity.getUsername())
+                .status(tripGroupEntity.getStatus())
                 .build();
     }
 
@@ -135,5 +170,35 @@ class HikingServiceTest {
 
         //assert
         assertThat(munroBagDto).containsOnly(expectedMunroBagDto);
+    }
+
+    @Test
+    public void testGetTripByOrganiserId() {
+
+        // arrange
+        TripEntity tripEntity = createTripEntity();
+        TripDto expectedTripDto = createMatchingTripDto(tripEntity);
+        when(tripRepository.findByOrganiserId(12345678910L)).thenReturn(tripEntity);
+
+        // act
+        TripDto tripDto = hikingService.getTripByOrganiserId(12345678910L);
+
+        // assert
+        assertThat(tripDto).isEqualTo(expectedTripDto);
+    }
+
+    @Test
+    public void testGetTripGroupByTripId() {
+
+        // arrange
+        TripGroupEntity tripGroupEntity = createTripGroupEntity();
+        TripGroupDto expectedTripGroupDto = createMatchingTripGroupDto(tripGroupEntity);
+        when(tripGroupRepository.findByTripId(12345678910L)).thenReturn(tripGroupEntity);
+
+        // act
+        TripGroupDto tripGroupDto = hikingService.getTripGroupByTripId(12345678910L);
+
+        // assert
+        assertThat(tripGroupDto).isEqualTo(expectedTripGroupDto);
     }
 }
