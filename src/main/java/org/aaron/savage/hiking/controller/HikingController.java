@@ -37,12 +37,12 @@ public class HikingController {
     @GetMapping("getTripByOrganiserId")
     public TripDto getTripByOrganiserId() {
 
-        return hikingService.getTripByOrganiserId(12345678910L);
+        return hikingService.getTripByOrganiserId(110L);
     }
 
     @GetMapping("getTripGroupByTripId")
     public TripGroupDto getTripGroupByTripId() {
 
-        return hikingService.getTripGroupByTripId(12345678910L);
+        return hikingService.getTripGroupByTripId(110L);
     }
 }
