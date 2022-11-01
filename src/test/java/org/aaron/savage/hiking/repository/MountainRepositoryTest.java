@@ -88,6 +88,40 @@ class MountainRepositoryTest {
     }
 
     @Test
+    public void testThatEntryCanBeRetrievedByRegion() {
+
+        //arrange
+        MountainEntity expectedMountain1 = createMountain().setRegion("Fort William");
+        MountainEntity expectedMountain2 = createMountain().setRegion("Loch Lomond");
+        testEntityManager.persist(expectedMountain1);
+        testEntityManager.persist(expectedMountain2);
+
+        //act
+        List<MountainEntity> actualMountains = StreamSupport.stream(mountainRepository.findByRegion("Fort William").spliterator(), false)
+                .collect(Collectors.toList());
+
+        //assert
+        assertThat(actualMountains).containsOnly(expectedMountain1);
+    }
+
+    // TODO: Fix test
+    @Test
+    public void testThatEntryCanBeRetrievedById() {
+
+        //arrange
+        MountainEntity expectedMountain1 = createMountain().setId(40);
+        MountainEntity expectedMountain2 = createMountain().setId(46);
+        testEntityManager.persist(expectedMountain1);
+        testEntityManager.persist(expectedMountain2);
+
+        //act
+        MountainEntity actualMountain = mountainRepository.findById(40);
+
+        //assert
+        assertThat(actualMountain).isEqualTo(expectedMountain1);
+    }
+
+    @Test
     public void testThatEntryCanBeRetrievedByNameAndRegion() {
 
         //arrange

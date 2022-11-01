@@ -12,4 +12,8 @@ public interface MountainRepository extends CrudRepository<MountainEntity, Long>
     List<MountainEntity> findByName(String name);
 
     MountainEntity findByNameAndRegion(String name, String region);
+
+    List<MountainEntity> findByRegion(String region);
+
+    MountainEntity findById(long id);
 }

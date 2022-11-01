@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface MunroBagRepository extends CrudRepository<MunroBagEntity, Long> {
 
-    List<MunroBagEntity> findByUsername(String username);
+    List<MunroBagEntity> findMunroBagByUsername(String username);
 }

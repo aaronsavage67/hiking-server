@@ -128,7 +128,22 @@ class HikingServiceTest {
     }
 
     @Test
-    public void testGetMountains() {
+    public void testGetAllMountains() {
+
+        // arrange
+        MountainEntity mountainEntity = createMountainEntity();
+        MountainDto expectedMountainDto = createMatchingMountainDto(mountainEntity);
+        when(mountainRepository.findAll()).thenReturn(List.of(mountainEntity));
+
+        // act
+        List<MountainDto> mountainDtos = hikingService.getAllMountains();
+
+        // assert
+        assertThat(mountainDtos).containsOnly(expectedMountainDto);
+    }
+
+    @Test
+    public void testGetMountainByName() {
 
         // arrange
         MountainEntity mountainEntity = createMountainEntity();
@@ -136,14 +151,45 @@ class HikingServiceTest {
         when(mountainRepository.findByName("Ben Lui")).thenReturn(List.of(mountainEntity));
 
         // act
-        List<MountainDto> mountainDtos = hikingService.getMountains("Ben Lui");
+        List<MountainDto> mountainDtos = hikingService.getMountainByName("Ben Lui");
 
         // assert
         assertThat(mountainDtos).containsOnly(expectedMountainDto);
     }
 
     @Test
-    public void testGetUsername() {
+    public void testGetMountainById() {
+
+        // arrange
+        MountainEntity mountainEntity = createMountainEntity();
+        MountainDto expectedMountainDto = createMatchingMountainDto(mountainEntity);
+        when(mountainRepository.findById(35)).thenReturn(mountainEntity);
+
+        // act
+        MountainDto mountainDtos = hikingService.getMountainById(35);
+
+        // assert
+        assertThat(mountainDtos).isEqualTo(expectedMountainDto);
+    }
+
+    @Test
+    public void testGetMountainsByRegion() {
+
+        // arrange
+        MountainEntity mountainEntity = createMountainEntity();
+        MountainDto expectedMountainDto = createMatchingMountainDto(mountainEntity);
+        when(mountainRepository.findByRegion("Fort William")).thenReturn(List.of(mountainEntity));
+
+        // act
+        List<MountainDto> mountainDtos = hikingService.getMountainsByRegion("Fort William");
+
+        // assert
+        assertThat(mountainDtos).containsOnly(expectedMountainDto);
+    }
+
+
+    @Test
+    public void testGetUserByUsername() {
 
         // arrange
         UserEntity userEntity = createUserEntity();
@@ -151,7 +197,7 @@ class HikingServiceTest {
         when(userRepository.findByUsername("KieranTierney")).thenReturn(userEntity);
 
         // act
-        UserDto userDto = hikingService.getUsername("KieranTierney");
+        UserDto userDto = hikingService.getUserByUsername("KieranTierney");
 
         // assert
         assertThat(userDto).isEqualTo(expectedUserDto);
@@ -163,7 +209,7 @@ class HikingServiceTest {
         //arrange
         MunroBagEntity munroBagEntity = createMunroBagEntity();
         MunroBagDto expectedMunroBagDto = createMatchingMunroBagDto(munroBagEntity);
-        when(munroBagRepository.findByUsername("user67")).thenReturn(List.of(munroBagEntity));
+        when(munroBagRepository.findMunroBagByUsername("user67")).thenReturn(List.of(munroBagEntity));
 
         //act
         List<MunroBagDto> munroBagDto = hikingService.getMunrosBaggedByUsername("user67");
@@ -172,33 +218,33 @@ class HikingServiceTest {
         assertThat(munroBagDto).containsOnly(expectedMunroBagDto);
     }
 
-    @Test
-    public void testGetTripByOrganiserId() {
-
-        // arrange
-        TripEntity tripEntity = createTripEntity();
-        TripDto expectedTripDto = createMatchingTripDto(tripEntity);
-        when(tripRepository.findByOrganiserId(12345678910L)).thenReturn(tripEntity);
-
-        // act
-        TripDto tripDto = hikingService.getTripByOrganiserId(12345678910L);
-
-        // assert
-        assertThat(tripDto).isEqualTo(expectedTripDto);
-    }
-
-    @Test
-    public void testGetTripGroupByTripId() {
-
-        // arrange
-        TripGroupEntity tripGroupEntity = createTripGroupEntity();
-        TripGroupDto expectedTripGroupDto = createMatchingTripGroupDto(tripGroupEntity);
-        when(tripGroupRepository.findByTripId(12345678910L)).thenReturn(tripGroupEntity);
-
-        // act
-        TripGroupDto tripGroupDto = hikingService.getTripGroupByTripId(12345678910L);
-
-        // assert
-        assertThat(tripGroupDto).isEqualTo(expectedTripGroupDto);
-    }
+//    @Test
+//    public void testGetTripByOrganiserId() {
+//
+//        // arrange
+//        TripEntity tripEntity = createTripEntity();
+//        TripDto expectedTripDto = createMatchingTripDto(tripEntity);
+//        when(tripRepository.findByOrganiserId(12345678910L)).thenReturn(tripEntity);
+//
+//        // act
+//        TripDto tripDto = hikingService.getTripByOrganiserId(12345678910L);
+//
+//        // assert
+//        assertThat(tripDto).isEqualTo(expectedTripDto);
+//    }
+//
+//    @Test
+//    public void testGetTripGroupByTripId() {
+//
+//        // arrange
+//        TripGroupEntity tripGroupEntity = createTripGroupEntity();
+//        TripGroupDto expectedTripGroupDto = createMatchingTripGroupDto(tripGroupEntity);
+//        when(tripGroupRepository.findByTripId(12345678910L)).thenReturn(tripGroupEntity);
+//
+//        // act
+//        TripGroupDto tripGroupDto = hikingService.getTripGroupByTripId(12345678910L);
+//
+//        // assert
+//        assertThat(tripGroupDto).isEqualTo(expectedTripGroupDto);
+//    }
 }

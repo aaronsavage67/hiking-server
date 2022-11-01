@@ -61,7 +61,7 @@ class MunroBagRepositoryTest {
         testEntityManager.persist(expectedMunroBag);
 
         //act
-        List<MunroBagEntity> actualMunroBags = StreamSupport.stream(munroBagRepository.findByUsername("user67").spliterator(), false)
+        List<MunroBagEntity> actualMunroBags = StreamSupport.stream(munroBagRepository.findMunroBagByUsername("user67").spliterator(), false)
                 .collect(Collectors.toList());
 
         //assert
@@ -78,7 +78,7 @@ class MunroBagRepositoryTest {
         testEntityManager.persist(expectedMunroBag2);
 
         //act
-        List<MunroBagEntity> actualMunroBags = StreamSupport.stream(munroBagRepository.findByUsername("user67").spliterator(), false)
+        List<MunroBagEntity> actualMunroBags = StreamSupport.stream(munroBagRepository.findMunroBagByUsername("user67").spliterator(), false)
                 .collect(Collectors.toList());
 
         //assert
@@ -91,7 +91,7 @@ class MunroBagRepositoryTest {
         //arrange
 
         //act
-        List<MunroBagEntity> actualMunroBags = StreamSupport.stream(munroBagRepository.findByUsername("user67").spliterator(), false)
+        List<MunroBagEntity> actualMunroBags = StreamSupport.stream(munroBagRepository.findMunroBagByUsername("user67").spliterator(), false)
                 .collect(Collectors.toList());
 
         //assert

@@ -16,33 +16,56 @@ public class HikingController {
 
     private HikingService hikingService;
 
-    @GetMapping("getMountains")
-    public List<MountainDto> getMountains() {
+    @GetMapping("getAllMountains")
+    public List<MountainDto> getAllMountains() {
 
-        return hikingService.getMountains("name");
+        return hikingService.getAllMountains();
     }
 
-    @GetMapping("getUsername")
-    public UserDto getUsername() {
+    /**
+     *
+     * @param name
+     * @return List<MountainDto> returns a list as there are cases where there are two mountains with the same name
+     */
+    @GetMapping("getMountainByName")
+    public List<MountainDto> getMountainByName(String name) {
 
-        return hikingService.getUsername("username");
+        return hikingService.getMountainByName(name);
+    }
+
+    @GetMapping("getMountainById")
+    public MountainDto getMountainById(long id) {
+
+        return hikingService.getMountainById(id);
+    }
+
+    @GetMapping("getMountainsByRegion")
+    public List<MountainDto> getMountainsByRegion(String region) {
+
+        return hikingService.getMountainsByRegion(region);
+    }
+
+    @GetMapping("getUserByUsername")
+    public UserDto getUserByUsername(String username) {
+
+        return hikingService.getUserByUsername(username);
     }
 
     @GetMapping("getMunrosBaggedByUsername")
-    public List<MunroBagDto> getMunrosBaggedByUsername() {
+    public List<MunroBagDto> getMunrosBaggedByUsername(String username) {
 
-        return hikingService.getMunrosBaggedByUsername("username");
+        return hikingService.getMunrosBaggedByUsername(username);
     }
 
-    @GetMapping("getTripByOrganiserId")
-    public TripDto getTripByOrganiserId() {
-
-        return hikingService.getTripByOrganiserId(110L);
-    }
-
-    @GetMapping("getTripGroupByTripId")
-    public TripGroupDto getTripGroupByTripId() {
-
-        return hikingService.getTripGroupByTripId(110L);
-    }
+//    @GetMapping("getTripByOrganiserId")
+//    public TripDto getTripByOrganiserId() {
+//
+//        return hikingService.getTripByOrganiserId(110L);
+//    }
+//
+//    @GetMapping("getTripGroupByTripId")
+//    public TripGroupDto getTripGroupByTripId() {
+//
+//        return hikingService.getTripGroupByTripId(110L);
+//    }
 }
