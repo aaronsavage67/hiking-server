@@ -32,9 +32,11 @@ class UserRepositoryTest {
     private UserEntity createUser() {
 
         return new UserEntity()
-                .setName("Aaron Savage")
                 .setUsername("user67")
-                .setPassword("securePassword");
+                .setPassword("securePassword")
+                .setEmail("email@account.com")
+                .setActivated("yes")
+                .setCode("123456");
     }
 
     @Test
@@ -61,6 +63,20 @@ class UserRepositoryTest {
 
         //act
         UserEntity actualUser = userRepository.findByUsername("user67");
+
+        //assert
+        assertThat(actualUser).isEqualTo(expectedUser);
+    }
+
+    @Test
+    public void testThatEntryCanBeRetrievedByPassword() {
+
+        //arrange
+        UserEntity expectedUser = createUser();
+        testEntityManager.persist(expectedUser);
+
+        //act
+        UserEntity actualUser = userRepository.findByPassword("securePassword");
 
         //assert
         assertThat(actualUser).isEqualTo(expectedUser);

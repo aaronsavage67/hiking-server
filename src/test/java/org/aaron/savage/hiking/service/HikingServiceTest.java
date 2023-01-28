@@ -2,15 +2,20 @@ package org.aaron.savage.hiking.service;
 
 import org.aaron.savage.hiking.dto.*;
 import org.aaron.savage.hiking.entity.*;
+import org.aaron.savage.hiking.exception.DuplicateEntryException;
+import org.aaron.savage.hiking.exception.FailedToSendEmailException;
 import org.aaron.savage.hiking.repository.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class HikingServiceTest {
 
@@ -24,12 +29,14 @@ class HikingServiceTest {
 
     private TripGroupRepository tripGroupRepository = mock(TripGroupRepository.class);
 
+    private JavaMailSender emailSender = mock(JavaMailSender.class);
+
     private HikingService hikingService;
 
     @BeforeEach
     public void setUp() {
         hikingService = new HikingService(mountainRepository, userRepository, munroBagRepository, tripRepository,
-                tripGroupRepository);
+                tripGroupRepository, emailSender);
     }
 
     private MountainEntity createMountainEntity() {
@@ -46,9 +53,11 @@ class HikingServiceTest {
     private UserEntity createUserEntity() {
 
         return new UserEntity()
-                .setName("Aaron Savage")
                 .setUsername("user67")
-                .setPassword("securePassword");
+                .setPassword("securePassword")
+                .setEmail("email@account.com")
+                .setActivated("yes")
+                .setCode("123456");
     }
 
     private MunroBagEntity createMunroBagEntity() {
@@ -63,8 +72,8 @@ class HikingServiceTest {
     private TripEntity createTripEntity() {
 
         return new TripEntity()
-                .setOrganiserId(12345678910L)
-                .setMountainId(12345678910L)
+                .setOrganiserId(2)
+                .setMountainId(14)
                 .setDate("27/05/2000")
                 .setDescription("Walk is taking place now");
     }
@@ -73,7 +82,7 @@ class HikingServiceTest {
 
         return new TripGroupEntity()
                 .setUsername("user67")
-                .setTripId(12345678910L)
+                .setTripId(6)
                 .setStatus("Yes");
     }
 
@@ -92,9 +101,9 @@ class HikingServiceTest {
     private UserDto createMatchingUserDto(UserEntity userEntity) {
 
         return UserDto.builder()
-                .name(userEntity.getName())
                 .username(userEntity.getUsername())
                 .password(userEntity.getPassword())
+                .email(userEntity.getEmail())
                 .build();
     }
 
@@ -204,6 +213,56 @@ class HikingServiceTest {
     }
 
     @Test
+    public void testGetUserByPassword() {
+
+        // arrange
+        UserEntity userEntity = createUserEntity();
+        UserDto expectedUserDto = createMatchingUserDto(userEntity);
+        when(userRepository.findByPassword("securePassword")).thenReturn(userEntity);
+
+        // act
+        UserDto userDto = hikingService.getUserByPassword("securePassword");
+
+        // assert
+        assertThat(userDto).isEqualTo(expectedUserDto);
+    }
+
+    @Test
+    public void testDuplicateCreateUser() {
+
+        // arrange
+
+        // act
+        when(userRepository.save(any(UserEntity.class))).thenThrow(DuplicateEntryException.class);
+
+        // assert
+        assertThatExceptionOfType(DuplicateEntryException.class)
+                .isThrownBy(() -> {
+                    hikingService.createUser("user67", "securePassword", "email@account.com");
+                });
+    }
+
+    @Test
+    public void testEmailSendFailureOnCreateUser() {
+
+        // arrange
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("sender@mail.com");
+        message.setTo("receiver@mail.com");
+        message.setSubject("Subject");
+        message.setText("Hello World!");
+
+        // act
+        doThrow(FailedToSendEmailException.class).when(emailSender).send(any(SimpleMailMessage.class));
+
+        // assert
+        assertThatExceptionOfType(FailedToSendEmailException.class)
+                .isThrownBy(() -> {
+                    hikingService.createUser("user67", "securePassword", "email@account.com");
+                });
+    }
+
+    @Test
     public void testGetMunrosBaggedByUsername() {
 
         //arrange
@@ -218,33 +277,33 @@ class HikingServiceTest {
         assertThat(munroBagDto).containsOnly(expectedMunroBagDto);
     }
 
-//    @Test
-//    public void testGetTripByOrganiserId() {
-//
-//        // arrange
-//        TripEntity tripEntity = createTripEntity();
-//        TripDto expectedTripDto = createMatchingTripDto(tripEntity);
-//        when(tripRepository.findByOrganiserId(12345678910L)).thenReturn(tripEntity);
-//
-//        // act
-//        TripDto tripDto = hikingService.getTripByOrganiserId(12345678910L);
-//
-//        // assert
-//        assertThat(tripDto).isEqualTo(expectedTripDto);
-//    }
-//
-//    @Test
-//    public void testGetTripGroupByTripId() {
-//
-//        // arrange
-//        TripGroupEntity tripGroupEntity = createTripGroupEntity();
-//        TripGroupDto expectedTripGroupDto = createMatchingTripGroupDto(tripGroupEntity);
-//        when(tripGroupRepository.findByTripId(12345678910L)).thenReturn(tripGroupEntity);
-//
-//        // act
-//        TripGroupDto tripGroupDto = hikingService.getTripGroupByTripId(12345678910L);
-//
-//        // assert
-//        assertThat(tripGroupDto).isEqualTo(expectedTripGroupDto);
-//    }
+    @Test
+    public void testGetTripByOrganiserId() {
+
+        // arrange
+        TripEntity tripEntity = createTripEntity();
+        TripDto expectedTripDto = createMatchingTripDto(tripEntity);
+        when(tripRepository.findByOrganiserId(2)).thenReturn(tripEntity);
+
+        // act
+        TripDto tripDto = hikingService.getTripByOrganiserId(2);
+
+        // assert
+        assertThat(tripDto).isEqualTo(expectedTripDto);
+    }
+
+    @Test
+    public void testGetTripGroupByTripId() {
+
+        // arrange
+        TripGroupEntity tripGroupEntity = createTripGroupEntity();
+        TripGroupDto expectedTripGroupDto = createMatchingTripGroupDto(tripGroupEntity);
+        when(tripGroupRepository.findByTripId(6)).thenReturn(tripGroupEntity);
+
+        // act
+        TripGroupDto tripGroupDto = hikingService.getTripGroupByTripId(6);
+
+        // assert
+        assertThat(tripGroupDto).isEqualTo(expectedTripGroupDto);
+    }
 }

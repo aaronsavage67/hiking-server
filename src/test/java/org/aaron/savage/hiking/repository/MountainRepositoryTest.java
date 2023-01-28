@@ -103,19 +103,19 @@ class MountainRepositoryTest {
         //assert
         assertThat(actualMountains).containsOnly(expectedMountain1);
     }
-
-    // TODO: Fix test
+    
     @Test
     public void testThatEntryCanBeRetrievedById() {
 
         //arrange
-        MountainEntity expectedMountain1 = createMountain().setId(40);
-        MountainEntity expectedMountain2 = createMountain().setId(46);
-        testEntityManager.persist(expectedMountain1);
+        MountainEntity expectedMountain1 = createMountain();
+        MountainEntity expectedMountain2 = createMountain();
+        expectedMountain1 = testEntityManager.persist(expectedMountain1);
         testEntityManager.persist(expectedMountain2);
+        long expectedEntityId = expectedMountain1.getId();
 
         //act
-        MountainEntity actualMountain = mountainRepository.findById(40);
+        MountainEntity actualMountain = mountainRepository.findById(expectedEntityId);
 
         //assert
         assertThat(actualMountain).isEqualTo(expectedMountain1);

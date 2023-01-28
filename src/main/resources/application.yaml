@@ -7,6 +7,17 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 10
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: aaron.g.savage@gmail.com
+    password: jkpmngyfoyxcknpo
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 management:
   endpoints:

@@ -32,8 +32,8 @@ class TripRepositoryTest {
     private TripEntity createTrip() {
 
         return new TripEntity()
-                .setOrganiserId(910L)
-                .setMountainId(14L)
+                .setOrganiserId(2)
+                .setMountainId(14)
                 .setDate("27/05/2000")
                 .setDescription("Walk is taking place now");
     }
@@ -61,7 +61,7 @@ class TripRepositoryTest {
         testEntityManager.persist(expectedTrip);
 
         //act
-        TripEntity actualTrips = tripRepository.findByOrganiserId(910L);
+        TripEntity actualTrips = tripRepository.findByOrganiserId(2);
 
         //assert
         assertThat(actualTrips).isEqualTo(expectedTrip);
@@ -73,7 +73,7 @@ class TripRepositoryTest {
         //arrange
 
         //act
-        TripEntity actualTrips = tripRepository.findByOrganiserId(910L);
+        TripEntity actualTrips = tripRepository.findByOrganiserId(2);
 
         //assert
         assertThat(actualTrips).isNull();

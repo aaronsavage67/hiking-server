@@ -1,0 +1,210 @@
+---
+openapi: 3.0.3
+info:
+  title: Hiking Server
+  description: 4th Year Dissertation Project
+  version: "0.1"
+servers:
+  - url: http://localhost:8080
+paths:
+  /hiking/getAllMountains:
+    get:
+      description: get list of all mountains
+      responses:
+        "200":
+          description: success
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /hiking/getMountainById:
+    get:
+      description: get mountain by unique mountain id
+      parameters:
+        - name: id
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: "47"
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+              examples:
+                "0":
+                  value: '{"id":47,"name":"Beinn a'' Chròin","height":"3091ft","description":"Beinn a'' Chròin is a surprisingly rocky little mountain to the south of Crianlarich. The location of the true summit has been the subject of controversy; that with the largest cairn was regarded as the top for many years, but the higher, Munro summit is actually that further west along the ridge.","region":"Loch Lomond","coords":"56°192553N 4°362273W","routeImage":"image"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /hiking/getUserByUsername:
+    get:
+      description: get user by username
+      parameters:
+        - name: username
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: aaron67
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                "0":
+                  value: '{"id":1,"name":"aaron savage","username":"aaron67","password":"password123"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /hiking/getMunrosBaggedByUsername:
+    get:
+      description: get list of munros bagged by user by username
+      parameters:
+        - name: username
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: aaron67
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                "0":
+                  value: '[{"id":1,"username":"aaron67","mountainId":36,"date":"27/05/2000","rating":"10/10","comments":"very enjoyable"},{"id":14,"username":"aaron67","mountainId":58,"date":"12/10/2003","rating":"8/10","comments":"very enjoyable"},{"id":15,"username":"aaron67","mountainId":45,"date":"22/02/2012","rating":"5/10","comments":"very enjoyable"}]'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /hiking/getMountainsByRegion:
+    get:
+      description: get list of mountains by region
+      parameters:
+        - name: region
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: Fort William
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                "0":
+                  value: '[{"id":36,"name":"Am Bodach","height":"3386ft","description":"Am Bodach is a fine, steep and stony mountain on the main ridge of the Mamores between Kinlochleven and Fort William.","region":"Fort William","coords":"56°442273N 4°592023W","routeImage":"image"},{"id":37,"name":"An Gearanach","height":"3222ft","description":"An Gearanach is a magnificent ridge extending north from the main spine of the Mamores. The summit and intervening ridge is a narrow arete reminiscent of that between Càrn Mòr Dearg and Ben Nevis.","region":"Fort William","coords":"56°452303N 4°582023W","routeImage":"image"},{"id":38,"name":"Aonach Beag","height":"4049ft","description":"Aonach Beag is second highest summit in the Nevis Range, but is hidden from most views by the lower but more bulky Aonach Mòr. Its domed summit rises above extensive broken crags and corries.","region":"Fort William","coords":"56°502003N 4°312443W","routeImage":"image"}]'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /hiking/getMountainByName:
+    get:
+      description: get mountain by mountain name
+      parameters:
+        - name: name
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: Dreish
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties: {}
+              examples:
+                "0":
+                  value: '[{"id":27,"name":"Dreish","height":"3106ft","description":"To residents of Dundee, Driesh is one of the best-known and most climbed Munros. It rises steeply above Glen Doll in the upper part of Glen Clova but the summit area is much more rounded and less dramatic.","region":"Angus","coords":"56°502533N 3°112483W","routeImage":"image"}]'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+  /hiking/getUserByPassword:
+    get:
+      description: get user by users password
+      parameters:
+        - name: password
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+          example: password123
+      responses:
+        "200":
+          description: success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+              examples:
+                "0":
+                  value: '{"id":1,"name":"aaron savage","username":"aaron67","password":"password123"}'
+      servers:
+        - url: http://localhost:8080
+    servers:
+      - url: http://localhost:8080
+components:
+  schemas:
+    inline_response_200:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        id:
+          type: integer
+        region:
+          type: string
+        routeImage:
+          type: string
+        coords:
+          type: string
+        height:
+          type: string
+    inline_response_200_1:
+      type: object
+      properties:
+        password:
+          type: string
+        name:
+          type: string
+        id:
+          type: integer
+        username:
+          type: string
+
+  
