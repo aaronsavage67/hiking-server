@@ -30,7 +30,4 @@ public class MountainEntity {
 
     @Column(name = "coords", nullable = false, length = 100)
     private String coords;
-
-    @Column(name = "route_image", nullable = false, length = 250)
-    private String routeImage;
 }

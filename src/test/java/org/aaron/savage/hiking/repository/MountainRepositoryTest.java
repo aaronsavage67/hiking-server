@@ -36,8 +36,7 @@ class MountainRepositoryTest {
                 .setHeight("4411")
                 .setDescription("the tallest Munro")
                 .setRegion("Fort William")
-                .setCoords("237824")
-                .setRouteImage("image");
+                .setCoords("237824");
     }
 
     @Test

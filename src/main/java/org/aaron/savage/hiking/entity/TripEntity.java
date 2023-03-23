@@ -16,15 +16,12 @@ public class TripEntity {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @Column(name = "organiser_id", unique = true, nullable = false)
-    private long organiserId;
-
-    @Column(name = "mountain_id", unique = true, nullable = false)
+    @Column(name = "mountain_id", nullable = false)
     private long mountainId;
+
+    @Column(name = "mountain_name", nullable = false)
+    private String mountainName;
 
     @Column(name = "date", length = 10)
     private String date;
-
-    @Column(name = "description", length = 1000)
-    private String description;
 }

@@ -32,10 +32,9 @@ class TripRepositoryTest {
     private TripEntity createTrip() {
 
         return new TripEntity()
-                .setOrganiserId(2)
                 .setMountainId(14)
-                .setDate("27/05/2000")
-                .setDescription("Walk is taking place now");
+                .setMountainName("Ben Nevis")
+                .setDate("27/05/2000");
     }
 
     @Test
@@ -54,28 +53,30 @@ class TripRepositoryTest {
     }
 
     @Test
-    public void testThatEntryCanBeRetrievedByOrganiserId() {
+    public void testThatEntryCanBeRetrievedByMountainName() {
 
         //arrange
         TripEntity expectedTrip = createTrip();
         testEntityManager.persist(expectedTrip);
 
         //act
-        TripEntity actualTrips = tripRepository.findByOrganiserId(2);
+        List<TripEntity> actualTrips = tripRepository.findTripsByMountainName("Ben Nevis");
 
         //assert
-        assertThat(actualTrips).isEqualTo(expectedTrip);
+        assertThat(actualTrips).containsOnly(expectedTrip);
     }
 
     @Test
-    public void testThatDuplicateEntryDoesNotExistWhenRetrievedByOrganiserId() {
+    public void testThatEntryCanBeRetrievedByDate() {
 
         //arrange
+        TripEntity expectedTrip = createTrip();
+        testEntityManager.persist(expectedTrip);
 
         //act
-        TripEntity actualTrips = tripRepository.findByOrganiserId(2);
+        List<TripEntity> actualTrips = tripRepository.findTripsByDate("27/05/2000");
 
         //assert
-        assertThat(actualTrips).isNull();
+        assertThat(actualTrips).containsOnly(expectedTrip);
     }
 }

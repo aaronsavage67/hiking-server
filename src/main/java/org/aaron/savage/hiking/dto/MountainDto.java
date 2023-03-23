@@ -18,6 +18,4 @@ public class MountainDto {
     private String region;
 
     private String coords;
-
-    private String routeImage;
 }

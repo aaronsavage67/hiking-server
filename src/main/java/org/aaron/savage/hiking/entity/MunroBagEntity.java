@@ -22,12 +22,12 @@ public class MunroBagEntity {
     @Column(name = "mountain_id", nullable = false)
     private long mountainId;
 
+    @Column(name = "mountain_name", nullable = false)
+    private String mountainName;
+
     @Column(name = "date", length = 10)
     private String date;
 
     @Column(name = "rating", length = 10)
     private String rating;
-
-    @Column(name = "comments", length = 100)
-    private String comments;
 }

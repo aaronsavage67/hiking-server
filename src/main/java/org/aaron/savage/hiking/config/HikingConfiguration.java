@@ -11,10 +11,10 @@ public class HikingConfiguration {
 
     @Bean
     HikingService hikingService(MountainRepository mountainRepository, UserRepository userRepository, MunroBagRepository
-            munroBagRepository, TripRepository tripRepository, TripGroupRepository tripGroupRepository, JavaMailSender
-            javaMailSender) {
+            munroBagRepository, TripRepository tripRepository, TripGroupRepository tripGroupRepository, ReviewRepository
+            reviewRepository, JavaMailSender javaMailSender) {
 
         return new HikingService(mountainRepository, userRepository, munroBagRepository, tripRepository,
-                tripGroupRepository, javaMailSender);
+                tripGroupRepository, reviewRepository, javaMailSender);
     }
 }

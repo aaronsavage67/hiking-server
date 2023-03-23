@@ -33,9 +33,10 @@ class MunroBagRepositoryTest {
 
         return new MunroBagEntity()
                 .setUsername("user67")
+                .setMountainId(110L)
+                .setMountainName("Am Bodach")
                 .setDate("27/05/2000")
-                .setRating("10/10")
-                .setComments("what a great time I had climbing this hill");
+                .setRating("4");
     }
 
     @Test

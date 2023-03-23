@@ -12,7 +12,5 @@ public class TripGroupDto {
     private long tripId;
 
     private String username;
-
-    private String status;
 }
 

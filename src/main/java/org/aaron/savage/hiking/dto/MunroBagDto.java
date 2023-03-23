@@ -13,9 +13,9 @@ public class MunroBagDto {
 
     private long mountainId;
 
+    private String mountainName;
+
     private String date;
 
     private String rating;
-
-    private String comments;
 }

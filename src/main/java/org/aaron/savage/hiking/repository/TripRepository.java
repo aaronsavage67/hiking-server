@@ -4,8 +4,12 @@ import org.aaron.savage.hiking.entity.TripEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TripRepository extends CrudRepository<TripEntity, Long> {
 
-    TripEntity findByOrganiserId(long organiserId);
+    List<TripEntity> findTripsByMountainName(String mountainName);
+
+    List<TripEntity> findTripsByDate(String date);
 }

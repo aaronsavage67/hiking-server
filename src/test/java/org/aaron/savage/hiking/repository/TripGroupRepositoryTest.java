@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -32,9 +33,9 @@ class TripGroupRepositoryTest {
     private TripGroupEntity createTripGroup() {
 
         return new TripGroupEntity()
-                .setUsername("user67")
                 .setTripId(110L)
-                .setStatus("Yes");
+                .setUsername("user67")
+                .setTripId(110L);
     }
 
     @Test
@@ -53,26 +54,42 @@ class TripGroupRepositoryTest {
     }
 
     @Test
-    public void testThatEntryCanBeRetrievedByTripId() {
+    public void testThatUsernamesCanBeRetrievedByTripId() {
+
+        //arrange
+        TripGroupEntity expectedTripGroup = createTripGroup();
+        List<TripGroupEntity> expectedTripGroups = new ArrayList<>();
+        expectedTripGroups.add(expectedTripGroup);
+        testEntityManager.persist(expectedTripGroup);
+
+        //act
+        List<TripGroupEntity> actualTripGroup = tripGroupRepository.findUsernamesByTripId(110L);
+
+        //assert
+        assertThat(actualTripGroup).isEqualTo(expectedTripGroups);
+    }
+
+    @Test
+    public void testThatIdCanBeRetrievedByUsernameAndTripId() {
 
         //arrange
         TripGroupEntity expectedTripGroup = createTripGroup();
         testEntityManager.persist(expectedTripGroup);
 
         //act
-        TripGroupEntity actualTripGroup = tripGroupRepository.findByTripId(110L);
+        TripGroupEntity actualTripGroup = tripGroupRepository.findIdByUsernameAndTripId("user67", 110L);
 
         //assert
         assertThat(actualTripGroup).isEqualTo(expectedTripGroup);
     }
 
     @Test
-    public void testThatDuplicateEntryDoesNotExistWhenRetrievedByTripId() {
+    public void testThatDuplicateEntryDoesNotExistWhenRetrievedByUsernameAndTripId() {
 
         //arrange
 
         //act
-        TripGroupEntity actualTripGroups = tripGroupRepository.findByTripId(110L);
+        TripGroupEntity actualTripGroups = tripGroupRepository.findIdByUsernameAndTripId("user67", 110L);
 
         //assert
         assertThat(actualTripGroups).isNull();
